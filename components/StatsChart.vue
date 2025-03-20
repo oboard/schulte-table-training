@@ -30,11 +30,18 @@ const selectedPeriod = ref('日')
 const client = useSupabaseClient()
 
 const fetchData = async () => {
-  const { data } = await client
+  console.log('开始获取训练记录...')
+  const { data, error } = await client
     .from('schulte_records')
     .select('completion_time, created_at')
     .order('created_at', { ascending: true })
-
+  
+  if (error) {
+    console.error('获取训练记录失败:', error)
+    return []
+  }
+  
+  console.log('获取到训练记录:', data)
   return data || []
 }
 
